@@ -5,21 +5,26 @@
  http://ncatlab.org/nlab/show/reflective+sub-(infinity,1)-category+-+internal+formulation
 
    The following code is due to Mike Shulman. 
-   Edited for readability by Urs Schreiber.
+   Comments added by Urs Schreiber.
 
 *)
 
 
   (* We speak in the internal language of an ambient infinity-topos H. *)
+
   Require Import Homotopy.
+
 
 Section ReflectiveSubcategory.
 
   (* This section axiomatizes the notion of a 
   reflective sub-infinity-category rsc in H. *)
 
+  (* We proceed in three steps *)
+
+  (* Step A *)
   (* A reflective sub-infinity-category is in particular a full
-  sub-infinity-category, specified by the (equivalence classes of)
+  sub-infinity-category, hence specified by the (equivalence classes of)
   the objects contained in it. The following proposition asserts that
   an object is in the sub-category rsc. *)
 
@@ -27,6 +32,7 @@ Section ReflectiveSubcategory.
 
   Hypothesis in_rsc_prop : forall X, is_prop (in_rsc X).
 
+  (* Step B *)
   (* Externally, a full subcategory is reflective iff every object 
   comes with a reflector: a universal morphism to an object in the
   subcategory. The following states the existence of a reflector
@@ -41,18 +47,22 @@ Section ReflectiveSubcategory.
   Hypothesis reflect_is_reflection : forall X Y, in_rsc Y ->
     is_equiv (fun f: reflect X -> Y => f o map_to_reflect X).
 
+  (* Step C *)
   (* However, a reflector in the internal language encodes not just 
   a reflective subcategory, but a pullback-stable system of subcategories 
-  of all slices. The genuine reflective subcategories correspond to those 
-  such systems that consist of bundles which are fiberwise in the 
-  subcategory. This property is enforced by the following two axioms.
-  *)
+  of all slices of H. The subcategory in the slice over the unit object is the 
+  reflective subcategory to be axiomatized, the subcategories of the other 
+  slices have to be constrained to consist of fibrations that are 
+  _homotopy fiberwise_ in the subcategory.
 
-
+  For consistency, these fibrations are to form the right half in 
+  a _reflective factorization system_ . *)
 
   (* The following axiom ensures that the factorization system is determined
      by the underlying reflective subcategory, i.e. that it is a
      "reflective factorization system". *)
+
+
 
   Hypothesis rsc_reflective_fs : forall X Y (f : X -> Y) (y : Y),
     is_contr (reflect X) -> is_contr (reflect Y) -> is_contr (reflect {x:X & f x == y}).
