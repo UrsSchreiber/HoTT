@@ -32,11 +32,7 @@
    compatible ways. The first pieces of the following code are 
    therefore taken from
 
-     ReflectiveSubcategory.v
-
-   and
-
-     LexReflectiveSubcategory.v
+     ReflectiveSubcategory.v .
 
 *)
 
@@ -94,7 +90,7 @@
 
 (* Restrict sharp to a map between the two. *)
 
-  Definition restricted_sharp : DiscType -> coDiscType :=
+  Definition sharp_on_discrete : DiscType -> coDiscType :=
     (fun f =>  
       existT
        is_codiscrete
@@ -105,5 +101,7 @@
 (* This map is to exhibit an equivalence between the two *)
 
   Axiom discrete_is_equivalent_to_codiscrete :
-    is_equiv restricted_sharp.
+    is_equiv sharp_on_discrete.
+
+  
 
