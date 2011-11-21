@@ -103,5 +103,25 @@
   Axiom discrete_is_equivalent_to_codiscrete :
     is_equiv sharp_on_discrete.
 
-  
+  Definition equivalence_of_discrete_with_codiscrete :
+    equiv DiscType coDiscType.
+  Proof.
+    apply existT with sharp_on_discrete.
+    apply discrete_is_equivalent_to_codiscrete.
+  Defined.
+
+(* In terms of this equivalence we now obtain the remaining functor flat. *)
+
+  Definition flat : Type -> Type :=
+   (fun A => 
+     projT1
+     (
+     (inverse equivalence_of_discrete_with_codiscrete)
+     ( existT
+       is_codiscrete
+       ( sharp A )
+       ( sharp_is_codiscrete A ) 
+     )
+     )
+   ).
 
