@@ -1,8 +1,9 @@
 
 (* Coq-HoTT code formulating the notion "internal reflective subcategory". 
 
-   Externally this is the notion "reflective subcategory such that the 
-   reflector preserves products". For background and more discussion see
+   Externally this is the notion 
+   "reflective subcategory such that the reflector preserves products". 
+   For background and more discussion see
 
  http://ncatlab.org/nlab/show/internal+reflective+sub-(infinity,1)-category
 
@@ -27,7 +28,7 @@ Section ReflectiveSubcategory.
 
 (* == Definition ========================================================== *)
 
-  (* This section forumates internally the notion of a 
+  (* This section forumlates internally the notion of a 
      reflective sub-infinity-category rsc in H. *)
 
   (* We proceed in three steps *)
