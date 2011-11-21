@@ -1,11 +1,22 @@
 
+(* Coq-HoTT code formulating the notion "reflective subcategory"
+   internally. For background and more discussion see
+
+ http://ncatlab.org/nlab/show/reflective+sub-(infinity,1)-category+-+internal+formulation
+
+   The following code is due to Mike Shulman. 
+   Edited for readability by Urs Schreiber.
+
+*)
+
+
   (* We speak in the internal language of an ambient infinity-topos H. *)
   Require Import Homotopy.
 
 Section ReflectiveSubcategory.
 
-  (* This section axiomatizes a reflective sub-infinity-category 
-  rsc in H. *)
+  (* This section axiomatizes the notion of a 
+  reflective sub-infinity-category rsc in H. *)
 
   (* A reflective sub-infinity-category is in particular a full
   sub-infinity-category, specified by the (equivalence classes of)
