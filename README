@@ -9,15 +9,13 @@ the internal language of infinity-toposes
 
 The directory "Hott/Coq" contains Coq code
 
-  htt://ncatlab.org/nlab/show/Coq
+  http://ncatlab.org/nlab/show/Coq
 
 for Martin-Löf type theory
 
   http://ncatlab.org/nlab/Martin-Löf+type+theory .
 
-that sets up the basic notions of homotopy type theory
-
-  http://ncatlab.org/nlab/show/homotopy+type+theory ,
+that sets up the basic notions of homotopy type theory.
 
 The subdirectory "HoTT/Coq/HIT" contains code that sets up
 higher inductive types
