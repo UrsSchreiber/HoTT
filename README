@@ -1,6 +1,33 @@
-This is the main trunk for the Homotopy Type Theory project, see
+This directory contains material in the context of 
+homotopy type theory
 
-  http://homotopytypetheory.org/
+  http://ncatlab.org/nlab/show/homotopy+type+theory ,
+
+the internal language of infinity-toposes
+
+  http://ncatlab.org/nlab/show/(infinity,1)-topos .
+
+The directory "Hott/Coq" contains Coq code
+
+  htt://ncatlab.org/nlab/show/Coq
+
+for Martin-Löf type theory
+
+  http://ncatlab.org/nlab/Martin-Löf+type+theory .
+
+that sets up the basic notions of homotopy type theory
+
+  http://ncatlab.org/nlab/show/homotopy+type+theory ,
+
+The subdirectory "HoTT/Coq/HIT" contains code that sets up
+higher inductive types
+
+  http://ncatlab.org/nlab/show/higher+inductive+types.
+
+The subdirectory "HoTT/Coq/Cohesion" contains code that
+sets up the internal language of cohesive infinity-toposes
+
+  http://ncatlab.org/nlab/show/cohesive+(infinity,1)-topos .
 
 You can fork this repository to your own and then be automatically
 kept up to date on new developments. You can also contribute back into
@@ -12,7 +39,3 @@ to set up an appropriate input method, see
   http://coq.inria.fr/cocorico/TeXInputMethodForUnicodeNotations
 
 for help on doing so with Emacs and CoqIDE.
-
-And a bit more.
-
-
