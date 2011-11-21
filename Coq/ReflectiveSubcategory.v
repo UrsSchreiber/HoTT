@@ -1,21 +1,66 @@
-Require Import Homotopy.
+
+  (* We speak in the internal language of an ambient infinity-topos H. *)
+  Require Import Homotopy.
 
 Section ReflectiveSubcategory.
+
+  (* This section axiomatizes a reflective sub-infinity-category 
+  rsc in H. *)
+
+  (* A reflective sub-infinity-category is in particular a full
+  sub-infinity-category, specified by the (equivalence classes of)
+  the objects contained in it. The following proposition asserts that
+  an object is in the sub-category rsc. *)
 
   Hypothesis in_rsc : Type -> Type.
 
   Hypothesis in_rsc_prop : forall X, is_prop (in_rsc X).
 
+  (* Externally, a full subcategory is reflective iff every object 
+  comes with a reflector: a universal morphism to an object in the
+  subcategory. The following states the existence of a reflector
+  in the internal language.*)
+
   Hypothesis reflect : Type -> Type.
 
   Hypothesis reflect_in_rsc : forall X, in_rsc (reflect X).
-
-  Hint Resolve reflect_in_rsc.
 
   Hypothesis map_to_reflect : forall X, X -> reflect X.
 
   Hypothesis reflect_is_reflection : forall X Y, in_rsc Y ->
     is_equiv (fun f: reflect X -> Y => f o map_to_reflect X).
+
+  (* However, a reflector in the internal language encodes not just 
+  a reflective subcategory, but a pullback-stable system of subcategories 
+  of all slices. The genuine reflective subcategories correspond to those 
+  such systems that consist of bundles which are fiberwise in the 
+  subcategory. This property is enforced by the following two axioms.
+  *)
+
+
+
+  (* The following axiom ensures that the factorization system is determined
+     by the underlying reflective subcategory, i.e. that it is a
+     "reflective factorization system". *)
+
+  Hypothesis rsc_reflective_fs : forall X Y (f : X -> Y) (y : Y),
+    is_contr (reflect X) -> is_contr (reflect Y) -> is_contr (reflect {x:X & f x == y}).
+
+  (* A map is in E if all its homotopy fibers become contractible upon
+     reflection into the subcategory. *)
+
+  Definition in_E {X Y} (f : X -> Y) : Type
+    := forall y, is_contr (reflect {x:X & f x == y}).
+
+  Definition E_three_for_two {X Y Z} (f : X -> Y) (g : Y -> Z) :
+    in_E g -> in_E (g o f) -> in_E f.
+  Proof. Admitted.
+
+
+  (* We now deduce some basic properties of the reflective subcategory rsc.
+  *)
+
+  Hint Resolve reflect_in_rsc.
 
   (* Package up that equivalence as an 'equiv' object. *)
   Definition reflection_equiv : forall X Y, in_rsc Y ->
@@ -165,7 +210,7 @@ Section ReflectiveSubcategory.
     unfold reflect_functor, reflect_factor.
     apply inverse_is_section with
       (w := reflection_equiv X (reflect Y) (reflect_in_rsc Y))
-      (y :=  (map_to_reflect Y o f)).
+      (y := (map_to_reflect Y o f)).
     apply (happly p).
   Defined.
 
@@ -235,7 +280,7 @@ Section ReflectiveSubcategory.
     is_equiv (reflect_functor (map_to_reflect X)).
   Proof.
     assert (p : reflect_functor (map_to_reflect X) == map_to_reflect (reflect X)).
-    apply funext.  intros x. apply reflect_wellpointed.
+    apply funext. intros x. apply reflect_wellpointed.
     apply (transport (!p)).
     apply (pr2 (in_rsc_reflect_equiv (reflect X) (reflect_in_rsc X))).
   Defined.
@@ -353,7 +398,7 @@ Section ReflectiveSubcategory.
 
   End Products.
 
-  (* The subcategory is a local exponential ideal.  This is a little
+  (* The subcategory is a local exponential ideal. This is a little
      surprising, since in general not every reflective subcategory has
      this property, but it follows because our reflective subcategory
      is "internally" so. *)
@@ -437,13 +482,13 @@ Section ReflectiveSubcategory.
   End PreservesProducts.
 
   (* Semantically, so far what we have is a "reflective subfibration"
-     of the codomain fibration of the (oo,1)-category of types.  In
+     of the codomain fibration of the (oo,1)-category of types. In
      other words, each slice category H/x has a reflective subcategory
      R^x, and the pullback functors preserve the R's and commute with
      the reflectors.
 
      We want all of this data to be entirely determined by an ordinary
-     reflective subcategory of H itself.  We first impose an axiom
+     reflective subcategory of H itself. We first impose an axiom
      which is equivalent to saying that if M is the class of morphisms
      that are the objects of the categories R^x, then M is the right
      class of a factorization system.
@@ -528,7 +573,7 @@ Section ReflectiveSubcategory.
     Defined.
 
     (* This proof is far too messy. *)
-    Definition reflect_functor_fiberwise  :
+    Definition reflect_functor_fiberwise :
       equiv {x:X & reflect (P x)} (reflect (sigT P)).
     Proof.
       exists rf1.
@@ -572,7 +617,7 @@ Section ReflectiveSubcategory.
         (fun X0 : sigT P =>
           let (x0, p0) := X0 in (existT
             (fun x' => reflect (P x')) x0 (map_to_reflect (P x0) p0))))).
-      path_via  (fun X0 : sigT P =>
+      path_via (fun X0 : sigT P =>
         let (x0, p0) := X0 in (existT
           (fun x' => reflect (P x')) x0 (map_to_reflect (P x0) p0))).
       apply inverse_is_section.
@@ -627,10 +672,8 @@ Section ReflectiveSubcategory.
   Definition in_M {X Y} (f : X -> Y) : Type
     := forall y, in_rsc {x:X & f x == y}.
 
-  (* A map is in E if all its homotopy fibers become contractible upon
-     reflection into the subcategory. *)
-  Definition in_E {X Y} (f : X -> Y) : Type
-    := forall y, is_contr (reflect {x:X & f x == y}).
+
+  (* Definition of in_E removed here*)
 
   Definition Mmap X Y := { f : X -> Y & in_M f }.
   Definition Mmap_coerce_to_function X Y (f : Mmap X Y) : (X -> Y) := projT1 f.
@@ -639,6 +682,8 @@ Section ReflectiveSubcategory.
   Definition Emap X Y := { f : X -> Y & in_E f }.
   Definition Emap_coerce_to_function X Y (f : Emap X Y) : (X -> Y) := projT1 f.
   Coercion Emap_coerce_to_function : Emap >-> Funclass.
+
+(* Remove the bit that gives universe inconsistency.
 
   (* A map that is inverted by the reflector, and whose codomain is in
      the subcategory, belongs to E. *)
@@ -664,7 +709,7 @@ Section ReflectiveSubcategory.
       assert (rcf : reflect_factor Yr PftoY o reflect_functor_equiv XtoPf
         == reflect_factor Yr f).
       path_via (reflect_factor Yr (PftoY o XtoPf)).
-      apply funext.  intros rx.
+      apply funext. intros rx.
       path_via (reflect_factor Yr PftoY (reflect_functor XtoPf rx)).
       apply reflect_factoriality2.
       apply (transport (!rcf)).
@@ -676,7 +721,7 @@ Section ReflectiveSubcategory.
     Let QftoYeq : equiv Qf Y.
     Proof.
       apply @equiv_compose with (B := reflect Pf).
-      apply reflect_functor_fiberwise. auto.
+      apply reflect_functor_fiberwise. auto. 
       exists (reflect_factor Yr PftoY). auto.
     Defined.
 
@@ -688,7 +733,7 @@ Section ReflectiveSubcategory.
     ((fun X0 : {x : Y & reflect {x0 : X & f x0 == x}} =>
        let (x, rp) return (reflect {y':Y & {x':X & f x' == y'}}) := X0 in
        reflect_functor (fun p : {x0 : X & f x0 == x} => (x ; p)) rp)
-     (existT (fun y' =>  reflect {x:X & f x == y'}) y rxp))).
+     (existT (fun y' => reflect {x:X & f x == y'}) y rxp))).
       path_via (reflect_factor Yr (PftoY o
         (fun p : {x0 : X & f x0 == y} => (y ; p))) rxp).
       apply reflect_factoriality2.
@@ -715,7 +760,7 @@ Section ReflectiveSubcategory.
       apply opposite, QftoYispr1.
       apply (transport (!fibeq)).
       apply hfcontr.
-      (* Oh noes!  Universe inconsistency! *)
+      (* Oh noes! Universe inconsistency! *)
     Defined.
 
   End InvertedInE.
@@ -728,11 +773,13 @@ Section ReflectiveSubcategory.
       (Yr := reflect_in_rsc X).
     assert (p : @id (reflect X) == reflect_factor (reflect_in_rsc X) (map_to_reflect X)).
     path_via (reflect_factor (reflect_in_rsc X) ((@id (reflect X) o map_to_reflect X))).
-    apply opposite.  apply funext.  intros x. apply reflect_factor_unfactors.
+    apply opposite. apply funext. intros x. apply reflect_factor_unfactors.
     apply funext; intros x; auto.
     apply (transport p).
     apply (pr2 (idequiv _)).
   Defined.
+
+*)
 
   (* E and M are homotopy orthogonal to each other. *)
   Section EMOrth.
@@ -768,7 +815,7 @@ Section ReflectiveSubcategory.
       unfold EMlift_tot.
       path_via (reflect_factor (pr2 m (g (e x)))
           (fun X0 : {x0 : X & e x0 == e x} =>
-            let (x0, p) := X0 in (f x0 ; s x0 @ map g p)) 
+            let (x0, p) := X0 in (f x0 ; s x0 @ map g p))
           (map_to_reflect _ (x ; idpath (e x)))).
       apply opposite, (pr2 (pr2 e (e x))).
       unfold reflect_factor.
@@ -814,7 +861,7 @@ Section ReflectiveSubcategory.
       exact (fiber_path (EMlift_uppertri_plus x)).
     Defined.
 
-    (* So far we have just shown that a lift exists.  We should prove
+    (* So far we have just shown that a lift exists. We should prove
        that it is unique, and in fact homotopy unique (i.e. the space
        of such lifts is contractible). *)
 
@@ -839,7 +886,7 @@ Section ReflectiveSubcategory.
 
     (* We can now identify the fiber of e as something more manageable.
        Probably univalence is not necessary for this proof, but it
-       makes it much easier.  *)
+       makes it much easier. *)
     Definition efiber_ident (z : Z) : {x : X & e x == z} ==
       { hf : {x:X & f x == pr1 z} & map_to_reflect _ hf == pr2 z }.
     Proof.
@@ -862,7 +909,7 @@ Section ReflectiveSubcategory.
       apply opposite.
       path_via (idpath (f x) @ p).
       apply @trans_is_concat.
-      apply @trans_map with    
+      apply @trans_map with
         (P := fun (y:Y) => f x == y)
         (Q := fun (y:Y) => reflect {x0:X & f x0 == y})
         (f := fun (y:Y) (r:f x == y) =>
@@ -896,15 +943,6 @@ Section ReflectiveSubcategory.
 
   End EMFactor.
 
-  (* The following axiom ensures that the factorization system is determined
-     by the underlying reflective subcategory, i.e. that it is a
-     "reflective factorization system". *)
-
-  Hypothesis rsc_reflective_fs : forall X Y (f : X -> Y) (y : Y),
-    is_contr (reflect X) -> is_contr (reflect Y) -> is_contr (reflect {x:X & f x == y}).
-
-  Definition E_three_for_two {X Y Z} (f : X -> Y) (g : Y -> Z) :
-    in_E g -> in_E (g o f) -> in_E f.
-  Proof. Admitted.
 
 End ReflectiveSubcategory.
+
